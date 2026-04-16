@@ -9,6 +9,7 @@ ARG taudemVersion2=81f7a07cdd3721617a30ee4e087804fddbcffa88
 ENV taudemDir=$depDir/taudem/bin
 ENV taudemDir2=$depDir/taudem_accelerated_flowDirections/taudem/build/bin
 
+
 ## ============================
 ## Fix APT permission issue
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,8 +26,8 @@ RUN apt-get update --fix-missing && \
 
 ## ============================
 ## Clone repositories
-RUN git clone https://github.com/dtarb/taudem.git
-RUN git clone https://github.com/fernandoa123/cybergis-toolkit.git taudem_accelerated_flowDirections
+RUN GIT_SSL_NO_VERIFY=true git clone https://github.com/dtarb/taudem.git
+RUN GIT_SSL_NO_VERIFY=true git clone https://github.com/fernandoa123/cybergis-toolkit.git taudem_accelerated_flowDirections
 
 ## ============================
 ## Compile Main taudem repo ##
@@ -74,9 +75,9 @@ ENV taudemDir=$depDir/taudem/bin
 ENV taudemDir2=$depDir/taudem_accelerated_flowDirections/taudem/build/bin
 
 ## ADDING FIM GROUP ##
-ARG GroupID=1370800235
-ARG GroupName=fim
-RUN addgroup --gid $GroupID $GroupName
+ARG GroupID=20
+ARG GroupName=staff
+#RUN addgroup --gid $GroupID $GroupName
 ENV GID=$GroupID
 ENV GN=$GroupName
 
@@ -139,7 +140,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 # Whitebox also attempts to always download a folder called testdata regardless of use.
 # We added an empty folder to fake out whitebox_tools.py so it doesn't try to download the folder
 ENV WBT_PATH=/usr/local/lib/python3.10/dist-packages/whitebox/WBT
-RUN wget -P $WBT_PATH https://www.whiteboxgeo.com/WBT_Linux/WhiteboxTools_linux_musl.zip && \
+RUN wget -P $WBT_PATH https://www.whiteboxgeo.com/WBT_Linux/WhiteboxTools_linux_musl.zip --no-check-certificate && \
     unzip -o $WBT_PATH/WhiteboxTools_linux_musl.zip -d $WBT_PATH && \
     cp $WBT_PATH/WhiteboxTools_linux_amd64/WBT/whitebox_tools $WBT_PATH
 # ----------------------------------
